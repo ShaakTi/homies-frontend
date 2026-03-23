@@ -1,0 +1,165 @@
+---
+import { site, nav, header } from '@/data/site';
+
+interface Props {
+  variant?: 'light' | 'dark';
+}
+
+interface NavItem {
+  text: string;
+  url?: string;
+  icon?: string;
+  children?: { text: string; url: string }[];
+}
+
+const { variant = 'light' } = Astro.props;
+const isDark = variant === 'dark';
+---
+
+<header
+  class="fixed top-0 z-50 w-full bg-primary-600 transition-all"
+  data-header
+  data-variant={variant}
+>
+  <div
+    class="container mx-auto flex h-20 items-center justify-between px-4 lg:h-24 lg:px-8"
+  >
+    <!-- Logo -->
+    <a href={site.url}>
+      <img src="/assets/img/HomiesLogoHoriz.svg" alt={site.name} class="h-10 lg:h-12" />
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav
+      class="hidden lg:flex lg:items-center lg:gap-4"
+      aria-label="Main navigation"
+    >
+      {
+        nav.map((item: NavItem) => (
+          <a
+            href={item.url}
+            class="header-nav-link inline-flex items-center gap-1 text-sm font-medium text-white hover:text-primary-200 transition-colors"
+          >
+            {item.icon && (
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 300 300" set:html={item.icon} />
+            )}
+            {item.text}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-4">
+      {
+        header.darkMode && (
+          <button
+            type="button"
+            data-dark-toggle
+            class="header-dark-toggle rounded-full p-2 transition-colors text-white hover:bg-white/20"
+            aria-label="Toggle dark mode"
+          >
+            <svg
+              class="h-5 w-5 dark:hidden"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+            <svg
+              class="hidden h-5 w-5 dark:block"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+          </button>
+        )
+      }
+
+      {
+        header.cta && (
+          <a
+            href={header.cta.url}
+            class:list={[
+              "header-cta hidden rounded-full px-5 py-2.5 text-sm font-medium transition-colors sm:inline-flex",
+              isDark
+                ? "bg-white text-primary-700 hover:bg-primary-100"
+                : "bg-secondary-600 text-white hover:bg-secondary-700"
+            ]}
+          >
+            {header.cta.text}
+          </a>
+        )
+      }
+
+      <!-- Mobile Menu Button -->
+      <button
+        type="button"
+        data-mobile-toggle
+        class:list={[
+          "header-mobile-toggle rounded-full p-2 transition-colors lg:hidden",
+          isDark
+            ? "text-primary-200 hover:bg-primary-800 hover:text-white"
+            : "text-gray-600 hover:bg-primary-100 dark:text-gray-400 dark:hover:bg-gray-800"
+        ]}
+        aria-label="Open menu"
+        aria-expanded="false"
+      >
+        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div class="hidden lg:hidden" data-mobile-menu>
+    <nav
+      class="border-t border-primary-200 bg-white px-4 py-4 dark:border-gray-800 dark:bg-gray-950"
+    >
+      {
+        nav.map((item: NavItem) => (
+          <a
+            href={item.url}
+            class="flex items-center gap-2 py-3 text-base font-medium text-gray-900 dark:text-white"
+          >
+            {item.icon && (
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 300 300" set:html={item.icon} />
+            )}
+            {item.text}
+          </a>
+        ))
+      }
+
+      {
+        header.cta && (
+          <div class="mt-4 border-t border-primary-200 pt-4 dark:border-gray-800">
+            <a
+              href={header.cta.url}
+              class="block w-full rounded-full bg-primary-700 px-5 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-primary-800"
+            >
+              {header.cta.text}
+            </a>
+          </div>
+        )
+      }
+    </nav>
+  </div>
+</header>

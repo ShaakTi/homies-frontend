@@ -1,0 +1,63 @@
+---
+import { faqs } from '@/data/site';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = '¿Cómo funciona?',
+  subtitle = 'El proceso es muy sencillo:'
+} = Astro.props;
+---
+
+<section id="faq" class="section-padding bg-white dark:bg-gray-950">
+  <div class="container mx-auto container-padding">
+    <div class="mx-auto max-w-3xl">
+      <!-- Header -->
+      <div class="text-center" data-animate>
+        <h2 class="font-display text-3xl font-regular text-gray-900 dark:text-white sm:text-6xl">
+          {title}
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+          {subtitle}
+        </p>
+      </div>
+
+      <!-- FAQ List -->
+      <div class="mt-12 space-y-6">
+        {faqs.map((faq, index) => (
+          <div
+            class="rounded-2xl bg-gray-50 p-6 dark:bg-gray-900"
+            data-animate
+            data-delay={index * 50}
+          >
+            <h3 class="flex items-start gap-4 font-semibold text-gray-900 dark:text-white">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-600 dark:bg-primary-900/30 dark:text-primary-400">
+                ✓
+              </span>
+              {faq.question}
+            </h3>
+            <p class="mt-4 pl-12 text-gray-600 dark:text-gray-400">
+              {faq.answer}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <!-- Contact CTA -->
+      <div class="mt-12 rounded-2xl bg-primary-50 p-8 text-center dark:bg-gray-900" data-animate>
+        <h3 class="font-semibold text-gray-900 dark:text-white">
+          ¿Tienes preguntas?
+        </h3>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">
+          Nos encantaría ayudarte. No dudes en contactarnos para cualquier consulta o para obtener más información sobre nuestros servicios.
+        </p>
+        <a href="/contact" class="btn-primary mt-4">
+          Contáctanos
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
